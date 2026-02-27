@@ -62,5 +62,5 @@
 
 ## Ссылки
 
-- GitHub: *(будет добавлено после создания репозитория)*
+- [GitHub](https://github.com/Roman72-186/telegram-webapp-data-collection)
 - Vercel: *(будет добавлено после деплоя)*

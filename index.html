@@ -7,11 +7,16 @@
 
   <!-- Telegram Meta Tags -->
   <meta name="telegram-web-app" content="true" />
-  <meta name="theme-color" content="#3390ec" />
+  <meta name="theme-color" content="#faf7f2" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
   <title>Сбор данных - Telegram Web App</title>
+
+  <!-- Google Fonts: Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,54 +24,85 @@
 
   <style>
     :root{
-      --tg-theme-bg-color:#ffffff;
-      --tg-theme-text-color:#000000;
-      --tg-theme-hint-color:#999999;
-      --tg-theme-link-color:#3390ec;
-      --tg-theme-button-color:#3390ec;
+      --tg-theme-bg-color:#faf7f2;
+      --tg-theme-text-color:#3d2e1e;
+      --tg-theme-hint-color:#6b5740;
+      --tg-theme-link-color:#c5a55a;
+      --tg-theme-button-color:#c5a55a;
       --tg-theme-button-text-color:#ffffff;
-      --tg-theme-secondary-bg-color:#f1f1f1;
+      --tg-theme-secondary-bg-color:#f5efe6;
+      --gold-primary:#c5a55a;
+      --gold-dark:#b8943e;
+      --gold-light:#e0c97a;
+      --text-dark:#3d2e1e;
+      --text-label:#6b5740;
+      --border-color:#e0d5c5;
+      --error-color:#d4453a;
     }
+    html{ scroll-behavior:smooth; }
     body{
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-      background:var(--tg-theme-bg-color);
-      color:var(--tg-theme-text-color);
+      font-family:'Montserrat',sans-serif;
+      background:
+        radial-gradient(ellipse at 20% 50%, rgba(197,165,90,.07) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(224,201,122,.09) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 80%, rgba(184,148,62,.05) 0%, transparent 50%),
+        radial-gradient(circle at 30% 10%, rgba(255,255,250,.6) 0%, transparent 40%),
+        radial-gradient(circle at 70% 90%, rgba(245,239,230,.8) 0%, transparent 40%),
+        linear-gradient(135deg, #faf7f2 0%, #f5efe6 30%, #faf7f2 50%, #f0e8da 70%, #faf7f2 100%);
+      color:var(--text-dark);
+      min-height:100vh;
     }
     .tg-button{
-      background:var(--tg-theme-button-color);
-      color:var(--tg-theme-button-text-color);
+      background:linear-gradient(135deg, var(--gold-primary), var(--gold-light));
+      color:#fff;
       cursor:pointer;
       pointer-events:auto;
+      box-shadow:0 4px 14px rgba(197,165,90,.35);
+      transition:all .3s ease;
     }
-    .tg-button:hover{ opacity:.9; }
+    .tg-button:hover{
+      box-shadow:0 6px 20px rgba(197,165,90,.5);
+      transform:translateY(-1px);
+    }
     .tg-button:disabled{
       opacity:.5;
       cursor:not-allowed;
+      transform:none;
     }
     .tg-input{
-      border:1px solid #e0e0e0;
+      border:1px solid var(--border-color);
+      background:rgba(255,255,252,.7);
       transition:all .2s;
+      color:var(--text-dark);
     }
     .tg-input:focus{
-      border-color:var(--tg-theme-button-color);
+      border-color:var(--gold-primary);
       outline:none;
-      box-shadow:0 0 0 3px rgba(51,144,236,.1);
+      box-shadow:0 0 0 3px rgba(197,165,90,.15);
     }
-    .tg-input.error{ border-color:#ff3333; }
+    .tg-input::placeholder{ color:#b8a890; }
+    .tg-input.error{ border-color:var(--error-color); }
     .error-message{
-      color:#ff3333;
+      color:var(--error-color);
       font-size:.875rem;
       margin-top:.25rem;
       min-height:1.1em;
     }
     .success-message{ display:none; }
     .success-message.show{ display:block; }
-    html{ scroll-behavior:smooth; }
+
+    /* Карточка формы — glassmorphism */
+    .form-card{
+      background:rgba(255,255,252,.92);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border:1px solid rgba(224,213,197,.5);
+    }
 
     /* Ошибка отправки */
     .fatal-box{
       display:none;
-      border:1px solid #ff3333;
+      border:1px solid var(--error-color);
       background:#fff5f5;
       border-radius:12px;
       padding:12px 14px;
@@ -88,19 +124,20 @@
       display:block;
     }
     .photo-upload-area{
-      border:2px dashed #e0e0e0;
+      border:2px dashed var(--border-color);
       border-radius:12px;
       padding:16px;
       text-align:center;
       cursor:pointer;
       transition:all .2s;
+      background:rgba(255,255,252,.5);
     }
     .photo-upload-area:hover{
-      border-color:var(--tg-theme-button-color);
-      background:rgba(51,144,236,.03);
+      border-color:var(--gold-primary);
+      background:rgba(197,165,90,.04);
     }
     .photo-upload-area.has-photo{
-      border-color:var(--tg-theme-button-color);
+      border-color:var(--gold-primary);
       border-style:solid;
     }
   </style>
@@ -108,96 +145,96 @@
 
 <body class="min-h-screen flex flex-col">
   <!-- Header -->
-  <header class="bg-white shadow-sm py-6 px-4">
+  <header class="py-6 px-4" style="background:transparent;">
     <div class="max-w-2xl mx-auto">
-      <h1 class="text-3xl font-bold text-gray-900 text-center mb-2">Замеры тела</h1>
-      <p class="text-gray-600 text-center">Заполните ваши текущие замеры и загрузите фото прогресса</p>
+      <h1 class="text-3xl font-bold text-center mb-2" style="color:var(--text-dark);">Замеры тела</h1>
+      <p class="text-center" style="color:var(--text-label);">Заполните ваши текущие замеры и загрузите фото прогресса</p>
     </div>
   </header>
 
   <!-- Main -->
   <main class="flex-1 max-w-2xl mx-auto w-full px-4 py-8">
     <!-- Form -->
-    <div id="dataForm" class="bg-white rounded-2xl shadow-lg p-6 md:p-8">
+    <div id="dataForm" class="form-card rounded-2xl shadow-lg p-6 md:p-8">
       <form id="form" class="space-y-6" novalidate>
 
         <!-- Замеры тела -->
-        <h2 class="text-lg font-semibold text-gray-800">Замеры <span class="text-red-500">*</span></h2>
+        <h2 class="text-lg font-semibold" style="color:var(--text-dark);">Замеры <span style="color:var(--error-color);">*</span></h2>
 
         <div class="grid grid-cols-2 gap-4">
           <!-- Вес -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="weight" class="block text-sm font-medium text-gray-700 mb-2">Вес (кг)</label>
+            <label for="weight" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Вес (кг)</label>
             <input type="number" id="weight" name="weight" step="0.1" inputmode="decimal"
-              class="tg-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-400"
+              class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="70.5" />
             <div id="weightError" class="error-message"></div>
           </div>
 
           <!-- Грудь -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="chest" class="block text-sm font-medium text-gray-700 mb-2">Грудь (см)</label>
+            <label for="chest" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Грудь (см)</label>
             <input type="number" id="chest" name="chest" step="0.1" inputmode="decimal"
-              class="tg-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-400"
+              class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="90" />
             <div id="chestError" class="error-message"></div>
           </div>
 
           <!-- Пупок -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="navel" class="block text-sm font-medium text-gray-700 mb-2">Пупок (см)</label>
+            <label for="navel" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Пупок (см)</label>
             <input type="number" id="navel" name="navel" step="0.1" inputmode="decimal"
-              class="tg-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-400"
+              class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="80" />
             <div id="navelError" class="error-message"></div>
           </div>
 
           <!-- Живот -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="stomach" class="block text-sm font-medium text-gray-700 mb-2">Живот (см)</label>
+            <label for="stomach" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Живот (см)</label>
             <input type="number" id="stomach" name="stomach" step="0.1" inputmode="decimal"
-              class="tg-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-400"
+              class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="85" />
             <div id="stomachError" class="error-message"></div>
           </div>
 
           <!-- Бёдра -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="hips" class="block text-sm font-medium text-gray-700 mb-2">Бёдра (см)</label>
+            <label for="hips" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Бёдра (см)</label>
             <input type="number" id="hips" name="hips" step="0.1" inputmode="decimal"
-              class="tg-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-400"
+              class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="95" />
             <div id="hipsError" class="error-message"></div>
           </div>
 
           <!-- Ноги -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="legs" class="block text-sm font-medium text-gray-700 mb-2">Ноги (см)</label>
+            <label for="legs" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Ноги (см)</label>
             <input type="number" id="legs" name="legs" step="0.1" inputmode="decimal"
-              class="tg-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-400"
+              class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="55" />
             <div id="legsError" class="error-message"></div>
           </div>
 
           <!-- Руки -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="arms" class="block text-sm font-medium text-gray-700 mb-2">Руки (см)</label>
+            <label for="arms" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Руки (см)</label>
             <input type="number" id="arms" name="arms" step="0.1" inputmode="decimal"
-              class="tg-input w-full px-4 py-3 rounded-lg text-gray-900 placeholder-gray-400"
+              class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="30" />
             <div id="armsError" class="error-message"></div>
           </div>
         </div>
 
         <!-- Фото -->
-        <h2 class="text-lg font-semibold text-gray-800 pt-4">Фото прогресса <span class="text-sm font-normal text-gray-500">(необязательно)</span></h2>
+        <h2 class="text-lg font-semibold pt-4" style="color:var(--text-dark);">Фото прогресса <span class="text-sm font-normal" style="color:var(--text-label);">(необязательно)</span></h2>
 
         <div class="space-y-4">
           <!-- Фото 1 -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Фото 1</label>
+            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 1</label>
             <div class="photo-upload-area" id="photoArea1" onclick="document.getElementById('photo1').click()">
-              <p class="text-gray-400 text-sm">Нажмите для загрузки фото</p>
+              <p class="text-sm" style="color:#b8a890;">Нажмите для загрузки фото</p>
               <input type="file" id="photo1" accept="image/*" class="hidden" />
             </div>
             <img id="preview1" class="photo-preview" alt="Превью фото 1" />
@@ -205,9 +242,9 @@
 
           <!-- Фото 2 -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Фото 2</label>
+            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 2</label>
             <div class="photo-upload-area" id="photoArea2" onclick="document.getElementById('photo2').click()">
-              <p class="text-gray-400 text-sm">Нажмите для загрузки фото</p>
+              <p class="text-sm" style="color:#b8a890;">Нажмите для загрузки фото</p>
               <input type="file" id="photo2" accept="image/*" class="hidden" />
             </div>
             <img id="preview2" class="photo-preview" alt="Превью фото 2" />
@@ -215,9 +252,9 @@
 
           <!-- Фото 3 -->
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Фото 3</label>
+            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 3</label>
             <div class="photo-upload-area" id="photoArea3" onclick="document.getElementById('photo3').click()">
-              <p class="text-gray-400 text-sm">Нажмите для загрузки фото</p>
+              <p class="text-sm" style="color:#b8a890;">Нажмите для загрузки фото</p>
               <input type="file" id="photo3" accept="image/*" class="hidden" />
             </div>
             <img id="preview3" class="photo-preview" alt="Превью фото 3" />
@@ -228,15 +265,15 @@
         <button
           type="submit"
           id="submitBtn"
-          class="tg-button w-full py-4 px-6 rounded-lg font-semibold text-lg transition-all duration-200 shadow-md hover:shadow-lg"
+          class="tg-button w-full py-4 px-6 rounded-full font-semibold text-lg transition-all duration-200"
         >
           Отправить замеры
         </button>
 
         <!-- Loading -->
         <div id="loadingIndicator" class="hidden text-center py-4">
-          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-          <p class="mt-2 text-gray-600">Отправка данных...</p>
+          <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2" style="border-color:var(--gold-primary);"></div>
+          <p class="mt-2" style="color:var(--text-label);">Отправка данных...</p>
         </div>
 
         <!-- Fatal -->
@@ -245,16 +282,16 @@
     </div>
 
     <!-- Success -->
-    <div id="successMessage" class="success-message bg-green-50 border border-green-200 rounded-2xl p-8 text-center mt-6">
-      <div class="text-green-600 text-5xl mb-4">&#10003;</div>
-      <h2 class="text-2xl font-bold text-gray-900 mb-2">Спасибо!</h2>
-      <p class="text-gray-700 text-lg">Ваши замеры успешно отправлены</p>
+    <div id="successMessage" class="success-message form-card rounded-2xl p-8 text-center mt-6" style="border:1px solid var(--border-color);">
+      <div class="text-5xl mb-4" style="color:var(--gold-primary);">&#10003;</div>
+      <h2 class="text-2xl font-bold mb-2" style="color:var(--text-dark);">Спасибо!</h2>
+      <p class="text-lg" style="color:var(--text-label);">Ваши замеры успешно отправлены</p>
     </div>
   </main>
 
   <!-- Footer -->
-  <footer id="footer" class="bg-gray-50 border-t border-gray-200 mt-auto">
-    <div class="max-w-4xl mx-auto px-4 py-6 text-center text-sm text-gray-500">
+  <footer id="footer" class="mt-auto" style="background:transparent;">
+    <div class="max-w-4xl mx-auto px-4 py-6 text-center text-sm" style="color:var(--text-label);">
       <p>&copy; 2025 Все права защищены</p>
     </div>
   </footer>
@@ -465,13 +502,6 @@
       const tg = window.Telegram.WebApp;
       tg.ready();
       tg.expand();
-
-      if (tg.themeParams) {
-        document.documentElement.style.setProperty('--tg-theme-bg-color', tg.themeParams.bg_color || '#ffffff');
-        document.documentElement.style.setProperty('--tg-theme-text-color', tg.themeParams.text_color || '#000000');
-        document.documentElement.style.setProperty('--tg-theme-button-color', tg.themeParams.button_color || '#3390ec');
-        document.documentElement.style.setProperty('--tg-theme-button-text-color', tg.themeParams.button_text_color || '#ffffff');
-      }
     }
   </script>
 </body>

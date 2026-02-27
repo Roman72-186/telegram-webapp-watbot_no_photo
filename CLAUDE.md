@@ -107,6 +107,15 @@ vercel --prod      # продакшн деплой
 - Проверить отправку с фото (URL из Cloudinary в payload к Leadteh)
 - Проверить отображение в тёмной теме Telegram
 
+## Cloudinary (хостинг фото)
+
+- **Cloud Name:** `dchpd9kpb`
+- **Upload Preset:** `sbor dannie` (Unsigned)
+- **Env-переменные (Vercel):** `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_UPLOAD_PRESET`
+- **Тариф:** Free (25 credits/месяц)
+- **Поток:** клиент отправляет base64 → `api/submit.js` загружает в Cloudinary → получает `secure_url` → передаёт URL в Leadteh
+- **Настройки preset:** Auto-generate public ID, display name = last segment of public ID
+
 ## Интеграция с Leadteh
 
 - **Аккаунт:** rb257034.leadteh.ru

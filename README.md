@@ -66,14 +66,51 @@
 
 Проект готов для деплоя на Vercel. Каждый пуш в ветку main запускает автодеплой.
 
-### Environment Variables (Vercel)
+### Настройка Cloudinary (хостинг фото)
 
-Для загрузки фото в Cloudinary необходимо добавить в Vercel → Settings → Environment Variables:
+Фото загружаются в Cloudinary на сервере, в Leadteh передаются короткие URL-ссылки.
+Cloudinary бесплатен (Free tier: 25 credits/месяц — хватит с запасом).
 
-| Переменная | Описание |
-|-----------|----------|
-| `CLOUDINARY_CLOUD_NAME` | Имя облака из Cloudinary Dashboard |
-| `CLOUDINARY_UPLOAD_PRESET` | Unsigned upload preset (создать в Settings → Upload) |
+#### Шаг 1: Регистрация
+
+1. Зарегистрируйтесь на [cloudinary.com](https://cloudinary.com)
+2. На главной странице Dashboard найдите **Cloud Name** (например `dchpd9kpb`)
+
+#### Шаг 2: Создание Upload Preset
+
+1. Перейдите в **Settings → Upload → Upload Presets**
+2. Нажмите **Add upload preset**
+3. Настройте:
+   - **Preset name:** любое имя (например `sbor dannie`)
+   - **Signing Mode:** **Unsigned**
+4. В разделе **Generated public ID:**
+   - Выберите **Auto-generate an unguessable public ID value**
+5. В разделе **Generated display name:**
+   - Выберите **Use the last segment of the public ID as the display Name**
+6. Остальные настройки оставьте по умолчанию
+7. Нажмите **Save**
+
+#### Шаг 3: Environment Variables в Vercel
+
+В **Vercel** → ваш проект → **Settings** → **Environment Variables** добавьте:
+
+| Переменная | Значение | Описание |
+|-----------|----------|----------|
+| `CLOUDINARY_CLOUD_NAME` | `dchpd9kpb` | Cloud Name из Cloudinary Dashboard |
+| `CLOUDINARY_UPLOAD_PRESET` | `sbor dannie` | Имя созданного Upload Preset |
+
+Выберите окружения: **Production**, **Preview**, **Development**.
+
+#### Как это работает
+
+```
+Клиент (index.html)              Сервер (api/submit.js)           Cloudinary
+─────────────────────────────────────────────────────────────────────────────
+Сжатие фото на клиенте    →  Получает base64            →  Загрузка фото
+(canvas, max 800px,           Отправляет в Cloudinary       Возврат URL
+JPEG quality 0.6)             Получает secure_url
+                              Передаёт URL в Leadteh
+```
 
 ## Ссылки
 

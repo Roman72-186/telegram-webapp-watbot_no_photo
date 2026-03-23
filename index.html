@@ -232,32 +232,44 @@
         <div class="space-y-4">
           <!-- Фото 1 -->
           <div>
-            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 1</label>
+            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 1 (Спереди)</label>
             <div class="photo-upload-area" id="photoArea1" onclick="document.getElementById('photo1').click()">
               <p class="text-sm" style="color:#b8a890;">Нажмите для загрузки фото</p>
               <input type="file" id="photo1" accept="image/*" class="hidden" />
             </div>
             <img id="preview1" class="photo-preview" alt="Превью фото 1" />
+            <div class="mt-2 text-xs" style="color:var(--text-label);">
+              <strong>Пример:</strong>
+              <img src="images/example_photo.png" alt="Пример фото спереди" class="max-w-full h-auto rounded mt-1" style="object-fit: cover; object-position: left; max-height: 300px; width: 33%;" />
+            </div>
           </div>
 
           <!-- Фото 2 -->
           <div>
-            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 2</label>
+            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 2 (Сбоку)</label>
             <div class="photo-upload-area" id="photoArea2" onclick="document.getElementById('photo2').click()">
               <p class="text-sm" style="color:#b8a890;">Нажмите для загрузки фото</p>
               <input type="file" id="photo2" accept="image/*" class="hidden" />
             </div>
             <img id="preview2" class="photo-preview" alt="Превью фото 2" />
+            <div class="mt-2 text-xs" style="color:var(--text-label);">
+              <strong>Пример:</strong>
+              <img src="images/example_photo.png" alt="Пример фото сбоку" class="max-w-full h-auto rounded mt-1" style="object-fit: cover; object-position: center; max-height: 300px; width: 33%;" />
+            </div>
           </div>
 
           <!-- Фото 3 -->
           <div>
-            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 3</label>
+            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 3 (Сзади)</label>
             <div class="photo-upload-area" id="photoArea3" onclick="document.getElementById('photo3').click()">
               <p class="text-sm" style="color:#b8a890;">Нажмите для загрузки фото</p>
               <input type="file" id="photo3" accept="image/*" class="hidden" />
             </div>
             <img id="preview3" class="photo-preview" alt="Превью фото 3" />
+            <div class="mt-2 text-xs" style="color:var(--text-label);">
+              <strong>Пример:</strong>
+              <img src="images/example_photo.png" alt="Пример фото сзади" class="max-w-full h-auto rounded mt-1" style="object-fit: cover; object-position: right; max-height: 300px; width: 33%;" />
+            </div>
           </div>
         </div>
 

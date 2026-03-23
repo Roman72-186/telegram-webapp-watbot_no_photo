@@ -173,7 +173,7 @@
 
           <!-- Грудь -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="chest" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Грудь (см)</label>
+            <label for="chest" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Обхват груди (см)</label>
             <input type="number" id="chest" name="chest" step="0.1" inputmode="decimal"
               class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="90" />
@@ -182,7 +182,7 @@
 
           <!-- Пупок -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="navel" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Пупок (см)</label>
+            <label for="navel" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Обхват по пупку (см)</label>
             <input type="number" id="navel" name="navel" step="0.1" inputmode="decimal"
               class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="80" />
@@ -191,7 +191,7 @@
 
           <!-- Живот -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="stomach" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Живот (см)</label>
+            <label for="stomach" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Обхват живота/талии (см)</label>
             <input type="number" id="stomach" name="stomach" step="0.1" inputmode="decimal"
               class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="85" />
@@ -200,7 +200,7 @@
 
           <!-- Бёдра -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="hips" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Бёдра (см)</label>
+            <label for="hips" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Обхват бёдер (см)</label>
             <input type="number" id="hips" name="hips" step="0.1" inputmode="decimal"
               class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="95" />
@@ -209,7 +209,7 @@
 
           <!-- Ноги -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="legs" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Ноги (см)</label>
+            <label for="legs" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Обхват квадрицепс (см)</label>
             <input type="number" id="legs" name="legs" step="0.1" inputmode="decimal"
               class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="55" />
@@ -218,7 +218,7 @@
 
           <!-- Руки -->
           <div class="col-span-2 sm:col-span-1">
-            <label for="arms" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Руки (см)</label>
+            <label for="arms" class="block text-sm font-medium mb-2" style="color:var(--text-label);">Обхват бицепс (см)</label>
             <input type="number" id="arms" name="arms" step="0.1" inputmode="decimal"
               class="tg-input w-full px-4 py-3 rounded-lg"
               placeholder="30" />
@@ -308,8 +308,8 @@
     // Поля замеров
     const measurementFields = ['weight', 'chest', 'navel', 'stomach', 'hips', 'legs', 'arms'];
     const measurementLabels = {
-      weight: 'Вес', chest: 'Грудь', navel: 'Пупок',
-      stomach: 'Живот', hips: 'Бёдра', legs: 'Ноги', arms: 'Руки'
+      weight: 'Вес', chest: 'Обхват груди', navel: 'Обхват по пупку',
+      stomach: 'Обхват живота/талии', hips: 'Обхват бёдер', legs: 'Обхват квадрицепс', arms: 'Обхват бицепс'
     };
 
     // Хранилище сжатых фото (base64)

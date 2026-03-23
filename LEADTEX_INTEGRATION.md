@@ -33,7 +33,7 @@ const telegram_id = user?.id;  // например: 123456789
 
 ```javascript
 // api/submit.js
-const WEBHOOK_URL = 'https://rb257034.leadteh.ru/inner_webhook/fe02b6a2-14d6-46c3-836f-5fb8292d0e4f';
+const WEBHOOK_URL = 'https://rb729467.leadteh.ru/inner_webhook/0f32708a-4738-425e-903a-986db0842534';
 
 const payloadToLeadteh = {
     contact_by: 'telegram_id',

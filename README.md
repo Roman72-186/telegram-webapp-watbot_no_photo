@@ -31,7 +31,7 @@
 ## Интеграция с Leadteh
 
 Проект настроен на отправку данных в Leadteh по вебхуку:
-`https://rb257034.leadteh.ru/inner_webhook/fe02b6a2-14d6-46c3-836f-5fb8292d0e4f`
+`https://rb729467.leadteh.ru/inner_webhook/0f32708a-4738-425e-903a-986db0842534`
 
 Данные отправляются в формате:
 ```json

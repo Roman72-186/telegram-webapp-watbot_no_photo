@@ -320,7 +320,10 @@
       // Собираем замеры
       const measurements = {};
       for (const field of measurementFields) {
-        measurements[field] = parseFloat(document.getElementById(field).value);
+        // Валидируем как число, но отправляем как строку
+        const val = parseFloat(document.getElementById(field).value);
+        if (isNaN(val) || val <= 0) return;
+        measurements[field] = document.getElementById(field).value.trim();
       }
 
       const payload = {

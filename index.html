@@ -112,34 +112,7 @@
     }
     .fatal-box.show{ display:block; }
 
-    /* Превью фото */
-    .photo-preview{
-      width:100%;
-      max-width:200px;
-      border-radius:8px;
-      margin-top:8px;
-      display:none;
-    }
-    .photo-preview.show{
-      display:block;
-    }
-    .photo-upload-area{
-      border:2px dashed var(--border-color);
-      border-radius:12px;
-      padding:16px;
-      text-align:center;
-      cursor:pointer;
-      transition:all .2s;
-      background:rgba(255,255,252,.5);
-    }
-    .photo-upload-area:hover{
-      border-color:var(--gold-primary);
-      background:rgba(197,165,90,.04);
-    }
-    .photo-upload-area.has-photo{
-      border-color:var(--gold-primary);
-      border-style:solid;
-    }
+
   </style>
 </head>
 
@@ -148,7 +121,7 @@
   <header class="py-6 px-4" style="background:transparent;">
     <div class="max-w-2xl mx-auto">
       <h1 class="text-3xl font-bold text-center mb-2" style="color:var(--text-dark);">Замеры тела</h1>
-      <p class="text-center" style="color:var(--text-label);">Заполните ваши текущие замеры и загрузите фото прогресса</p>
+      <p class="text-center" style="color:var(--text-label);">Заполните ваши текущие замеры</p>
     </div>
   </header>
 
@@ -226,52 +199,7 @@
           </div>
         </div>
 
-        <!-- Фото -->
-        <h2 class="text-lg font-semibold pt-4" style="color:var(--text-dark);">Фото прогресса <span class="text-sm font-normal" style="color:var(--text-label);">(необязательно)</span></h2>
 
-        <div class="space-y-4">
-          <!-- Фото 1 -->
-          <div>
-            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 1 (Спереди)</label>
-            <div class="photo-upload-area" id="photoArea1" onclick="document.getElementById('photo1').click()">
-              <p class="text-sm" style="color:#b8a890;">Нажмите для загрузки фото</p>
-              <input type="file" id="photo1" accept="image/*" class="hidden" />
-            </div>
-            <img id="preview1" class="photo-preview" alt="Превью фото 1" />
-            <div class="mt-2 text-xs" style="color:var(--text-label);">
-              <strong>Пример:</strong>
-              <img src="images/example_photo.png" alt="Пример фото спереди" class="max-w-full h-auto rounded mt-1" style="object-fit: cover; object-position: left; max-height: 300px; width: 33%;" />
-            </div>
-          </div>
-
-          <!-- Фото 2 -->
-          <div>
-            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 2 (Сбоку)</label>
-            <div class="photo-upload-area" id="photoArea2" onclick="document.getElementById('photo2').click()">
-              <p class="text-sm" style="color:#b8a890;">Нажмите для загрузки фото</p>
-              <input type="file" id="photo2" accept="image/*" class="hidden" />
-            </div>
-            <img id="preview2" class="photo-preview" alt="Превью фото 2" />
-            <div class="mt-2 text-xs" style="color:var(--text-label);">
-              <strong>Пример:</strong>
-              <img src="images/example_photo.png" alt="Пример фото сбоку" class="max-w-full h-auto rounded mt-1" style="object-fit: cover; object-position: center; max-height: 300px; width: 33%;" />
-            </div>
-          </div>
-
-          <!-- Фото 3 -->
-          <div>
-            <label class="block text-sm font-medium mb-2" style="color:var(--text-label);">Фото 3 (Сзади)</label>
-            <div class="photo-upload-area" id="photoArea3" onclick="document.getElementById('photo3').click()">
-              <p class="text-sm" style="color:#b8a890;">Нажмите для загрузки фото</p>
-              <input type="file" id="photo3" accept="image/*" class="hidden" />
-            </div>
-            <img id="preview3" class="photo-preview" alt="Превью фото 3" />
-            <div class="mt-2 text-xs" style="color:var(--text-label);">
-              <strong>Пример:</strong>
-              <img src="images/example_photo.png" alt="Пример фото сзади" class="max-w-full h-auto rounded mt-1" style="object-fit: cover; object-position: right; max-height: 300px; width: 33%;" />
-            </div>
-          </div>
-        </div>
 
         <!-- Submit -->
         <button
@@ -323,9 +251,6 @@
       weight: 'Вес', chest: 'Обхват груди', navel: 'Обхват по пупку',
       stomach: 'Обхват живота/талии', hips: 'Обхват бёдер', legs: 'Обхват квадрицепс', arms: 'Обхват бицепс'
     };
-
-    // Хранилище сжатых фото (base64)
-    const compressedPhotos = { photo1: null, photo2: null, photo3: null };
 
     // ===== Helpers =====
     function showFatal(message) {
@@ -382,68 +307,7 @@
       document.getElementById(field).addEventListener('blur', () => validateMeasurement(field));
     }
 
-    // ===== Сжатие фото =====
-    function compressImage(file, maxSize, quality) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const img = new Image();
-          img.onload = function() {
-            const canvas = document.createElement('canvas');
-            let w = img.width;
-            let h = img.height;
 
-            // Уменьшаем до maxSize по большей стороне
-            if (w > maxSize || h > maxSize) {
-              if (w > h) {
-                h = Math.round(h * maxSize / w);
-                w = maxSize;
-              } else {
-                w = Math.round(w * maxSize / h);
-                h = maxSize;
-              }
-            }
-
-            canvas.width = w;
-            canvas.height = h;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, w, h);
-
-            // JPEG с указанным quality
-            const dataUrl = canvas.toDataURL('image/jpeg', quality);
-            resolve(dataUrl);
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-
-    // ===== Обработка загрузки фото =====
-    function setupPhotoInput(inputId, previewId, areaId, storageKey) {
-      const input = document.getElementById(inputId);
-      const preview = document.getElementById(previewId);
-      const area = document.getElementById(areaId);
-
-      input.addEventListener('change', async function() {
-        const file = this.files[0];
-        if (!file) return;
-
-        // Сжимаем: max 800px, quality 0.6
-        const compressed = await compressImage(file, 800, 0.6);
-        compressedPhotos[storageKey] = compressed;
-
-        // Показываем превью
-        preview.src = compressed;
-        preview.classList.add('show');
-        area.classList.add('has-photo');
-        area.querySelector('p').textContent = file.name;
-      });
-    }
-
-    setupPhotoInput('photo1', 'preview1', 'photoArea1', 'photo1');
-    setupPhotoInput('photo2', 'preview2', 'photoArea2', 'photo2');
-    setupPhotoInput('photo3', 'preview3', 'photoArea3', 'photo3');
 
     // ===== Submit =====
     form.addEventListener('submit', async (e) => {
@@ -474,9 +338,6 @@
 
       const payload = {
         ...measurements,
-        photo_1: compressedPhotos.photo1 || null,
-        photo_2: compressedPhotos.photo2 || null,
-        photo_3: compressedPhotos.photo3 || null,
         telegram_id,
         telegram: {
           initData,

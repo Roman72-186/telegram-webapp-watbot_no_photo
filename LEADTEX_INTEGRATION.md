@@ -46,9 +46,6 @@ const payloadToLeadteh = {
         hips: 95,
         legs: 55,
         arms: 30,
-        photo_1: 'https://res.cloudinary.com/your-cloud/image/upload/v123/abc.jpg',
-        photo_2: null,
-        photo_3: null,
         telegram_id: 123456789,
         source: 'telegram-webapp-data-collection',
         ts: '2026-02-28T12:00:00.000Z',
@@ -102,7 +99,6 @@ const payloadToLeadteh = {
 │  2. Mini App (index.html)                             │
 │     - Получает telegram_id                            │
 │     - Пользователь заполняет замеры тела              │
-│     - Опционально загружает фото (сжатие на клиенте)  │
 │     - POST на /api/submit                             │
 └───────────────────────────────────────────────────────┘
                           │
@@ -110,8 +106,7 @@ const payloadToLeadteh = {
 ┌───────────────────────────────────────────────────────┐
 │  3. Vercel Serverless Function (api/submit.js)        │
 │     - Валидирует 7 числовых полей замеров             │
-│     - Загружает фото в Cloudinary → получает URL      │
-│     - Перенаправляет данные (с URL фото) в LEADTEX    │
+│     - Перенаправляет данные в LEADTEX                 │
 └───────────────────────────────────────────────────────┘
                           │
                           ▼

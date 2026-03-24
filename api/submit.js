@@ -1,34 +1,5 @@
 // api/submit.js (Vercel Serverless Function)
 
-// Загрузка base64 изображения в Cloudinary, возвращает URL
-async function uploadToCloudinary(base64DataUri) {
-  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET;
-
-  if (!cloudName || !uploadPreset) {
-    throw new Error('Cloudinary env variables not configured');
-  }
-
-  const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-  const formBody = new URLSearchParams();
-  formBody.append('file', base64DataUri);
-  formBody.append('upload_preset', uploadPreset);
-
-  const resp = await fetch(url, {
-    method: 'POST',
-    body: formBody,
-  });
-
-  if (!resp.ok) {
-    const errText = await resp.text().catch(() => '');
-    throw new Error(`Cloudinary upload failed (${resp.status}): ${errText}`);
-  }
-
-  const data = await resp.json();
-  return data.secure_url;
-}
-
 module.exports = async (req, res) => {
   try {
     if (req.method !== 'POST') {
@@ -37,7 +8,7 @@ module.exports = async (req, res) => {
     }
 
     // Вебхук Leadteh
-    const WEBHOOK_URL = 'https://rb729467.leadteh.ru/inner_webhook/0f32708a-4738-425e-903a-986db0842534';
+    const WEBHOOK_URL = 'https://rb729467.leadteh.ru/inner_webhook/4c77523d-3415-43d1-8668-07d35281cadb';
 
     let body = req.body;
     if (typeof body === 'string') {
@@ -67,26 +38,6 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Validation failed', details: errors });
     }
 
-    // Фото (опциональные, base64 строки) → загрузка в Cloudinary → URL
-    const photoFields = ['photo_1', 'photo_2', 'photo_3'];
-    const photoUrls = {};
-
-    for (const field of photoFields) {
-      const raw = body[field];
-      if (typeof raw === 'string' && raw.length > 0) {
-        try {
-          photoUrls[field] = await uploadToCloudinary(raw);
-        } catch (err) {
-          return res.status(502).json({
-            error: `Failed to upload ${field} to Cloudinary`,
-            message: err.message,
-          });
-        }
-      } else {
-        photoUrls[field] = null;
-      }
-    }
-
     // Подготовка данных для LEADTEX
     const payloadToLeadteh = {
       contact_by: 'telegram_id',
@@ -100,11 +51,6 @@ module.exports = async (req, res) => {
         hips: measurements.hips,
         legs: measurements.legs,
         arms: measurements.arms,
-
-        // Фото (URL из Cloudinary)
-        photo_1: photoUrls.photo_1,
-        photo_2: photoUrls.photo_2,
-        photo_3: photoUrls.photo_3,
 
         // Системные поля
         telegram_id: telegram_id,

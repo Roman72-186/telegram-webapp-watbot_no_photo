@@ -282,10 +282,6 @@
         showError(input, errorEl, `Поле "${label}" обязательно для заполнения`);
         return false;
       }
-      if (!input.value.trim()) {
-        showError(input, errorEl, `Поле "${label}" обязательно для заполнения`);
-        return false;
-      }
       if (isNaN(val) || val <= 0) {
         showError(input, errorEl, `Введите корректное значение для "${label}"`);
         return false;
@@ -310,9 +306,14 @@
 
 
     // ===== Submit =====
+    let isSubmitting = false;
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       hideFatal();
+
+      // Защита от двойной отправки
+      if (isSubmitting) return;
 
       if (!validateAllMeasurements()) return;
 
@@ -327,10 +328,15 @@
           ? initDataUnsafe.user.id
           : (window.DEV_TELEGRAM_ID || null);
 
+      // Предупреждение если нет telegram_id (открытие вне Telegram)
+      if (!telegram_id) {
+        showFatal('Ошибка: не удалось определить ваш Telegram ID. Откройте форму через Telegram-бота.');
+        return;
+      }
+
       // Собираем замеры
       const measurements = {};
       for (const field of measurementFields) {
-        // Валидируем как число, но отправляем как строку
         const val = parseFloat(document.getElementById(field).value);
         if (isNaN(val) || val <= 0) return;
         measurements[field] = document.getElementById(field).value.trim();
@@ -345,11 +351,7 @@
         }
       };
 
-      if (tg) {
-        tg.ready();
-        tg.expand();
-      }
-
+      isSubmitting = true;
       submitBtn.disabled = true;
       loadingIndicator.classList.remove('hidden');
 
@@ -368,10 +370,13 @@
         dataForm.classList.add('hidden');
         successMessage.classList.add('show');
 
-        if (tg) { try { tg.close(); } catch (_) {} }
+        if (tg) {
+          setTimeout(() => { try { tg.close(); } catch (_) {} }, 1500);
+        }
       } catch (err) {
         showFatal(`Произошла ошибка при отправке данных: ${err && err.message ? err.message : 'неизвестная ошибка'}`);
       } finally {
+        isSubmitting = false;
         submitBtn.disabled = false;
         loadingIndicator.classList.add('hidden');
       }

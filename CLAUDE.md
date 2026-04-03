@@ -1,36 +1,20 @@
-# Сбор данных — Telegram Web App
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Описание проекта
 
-Telegram Mini App для нутрициолога — сбор замеров тела и фотографий прогресса.
+Telegram Mini App для нутрициолога — сбор замеров тела без фото.
 Пользователь открывает Web App из Telegram-бота, заполняет 7 числовых полей замеров,
-опционально загружает до 3 фото, и данные уходят через serverless API в Leadteh webhook.
+и данные уходят через serverless API в Leadteh webhook.
 
 ## Стек технологий
 
-- **Frontend:** HTML5, Tailwind CSS (CDN), vanilla JavaScript
+- **Frontend:** HTML5, Tailwind CSS (CDN), vanilla JavaScript — без сборки, без npm
 - **Backend:** Vercel Serverless Functions (Node.js) — `api/submit.js`
 - **Деплой:** Vercel (автодеплой при push в main)
 - **Интеграции:** Telegram Web App API, Leadteh CRM (webhook)
-- **Аккаунт Leadteh:** rb257034.leadteh.ru
 - **Репозиторий:** https://github.com/Roman72-186/telegram-webapp-data-collection
-- **Продакшн URL:** *(будет добавлено после деплоя на Vercel)*
-
-## Структура проекта
-
-```
-├── index.html              — Основная страница с формой замеров тела
-├── offer.html              — Страница оферты (не используется в форме)
-├── privacy.html            — Политика конфиденциальности (не используется в форме)
-├── data-processing.html    — Согласие на обработку данных (не используется в форме)
-├── api/
-│   └── submit.js           — Serverless API (валидация + отправка в Leadteh)
-├── vercel.json             — Конфигурация Vercel
-├── README.md               — Описание проекта
-├── PROJECT_GUIDE.md        — Полное руководство
-├── LEADTEX_INTEGRATION.md  — Документация интеграции с Leadteh
-└── TESTING_INSTRUCTIONS.md — Инструкция по тестированию
-```
 
 ## Архитектура и поток данных
 
@@ -38,87 +22,52 @@ Telegram Mini App для нутрициолога — сбор замеров т
 Telegram Bot → Кнопка "Web App" → index.html (форма замеров)
     → POST /api/submit (Vercel Function)
     → Leadteh webhook (CRM)
-    → Ответ пользователю
+    → Ответ пользователю в браузере
 ```
 
-Telegram передаёт `telegram_id` через `Telegram.WebApp.initDataUnsafe.user.id`.
-API ищет контакт в Leadteh по `telegram_id` и обновляет его данные.
-
-**Важно:** Пользователь должен сначала написать `/start` боту — это создаёт контакт в Leadteh.
+- `telegram_id` получается через `Telegram.WebApp.initDataUnsafe.user.id`
+- При отсутствии Telegram контекста (тестирование) используется `window.DEV_TELEGRAM_ID`
+- API ищет контакт в Leadteh по `telegram_id` (пользователь должен сначала написать `/start` боту)
+- Фото **не загружаются** — это версия "без фото"
 
 ## Ключевые моменты при разработке
 
 - Язык интерфейса и комментариев — **русский**
-- 7 обязательных числовых полей замеров тела
-- 3 опциональных поля загрузки фото (сжимаются на клиенте: max 800px, JPEG quality 0.6)
-- Фото загружаются на сервере в Cloudinary, в Leadteh передаются URL-ссылки (не base64)
-- Env-переменные Cloudinary: `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_UPLOAD_PRESET` (задаются в Vercel)
-- Webhook: `https://rb257034.leadteh.ru/inner_webhook/fe02b6a2-14d6-46c3-836f-5fb8292d0e4f`
-- Webhook захардкожен в `api/submit.js`
+- Нет `package.json` — проект не требует `npm install`
 - Tailwind подключён через CDN, без сборки
-- Нет package.json — проект не требует `npm install`
-- Тема адаптируется к Telegram (тёмная/светлая через CSS-переменные)
-- source в payload: `telegram-webapp-data-collection`
-
-## Валидация формы
-
-| Поле      | Правило                        |
-|-----------|-------------------------------|
-| Вес (кг)  | Число > 0, обязательное       |
-| Грудь (см)| Число > 0, обязательное       |
-| Пупок (см)| Число > 0, обязательное       |
-| Живот (см)| Число > 0, обязательное       |
-| Бёдра (см)| Число > 0, обязательное       |
-| Ноги (см) | Число > 0, обязательное       |
-| Руки (см) | Число > 0, обязательное       |
-| Фото 1    | Опциональное, base64 JPEG (загружается в Cloudinary) |
-| Фото 2    | Опциональное, base64 JPEG (загружается в Cloudinary) |
-| Фото 3    | Опциональное, base64 JPEG (загружается в Cloudinary) |
-
-## Переменные Leadteh
-
-`weight`, `chest`, `navel`, `stomach`, `hips`, `legs`, `arms`, `photo_1`, `photo_2`, `photo_3`, `telegram_id`, `source`, `ts`, `submission_date`
-
-## Команды деплоя
-
-### Git — коммит и пуш
-
-```bash
-git status
-git add -A
-git commit -m "Описание изменений"
-git push origin main
-```
-
-### Vercel CLI
-
-```bash
-npm i -g vercel    # установка (однократно)
-vercel             # preview деплой
-vercel --prod      # продакшн деплой
-```
-
-## Тестирование
-
-- Открыть Web App через Telegram-бота (проверить получение telegram_id)
-- Проверить валидацию: пустые поля, нечисловые значения, отрицательные числа
-- Проверить загрузку фото: превью отображается, сжатие работает
-- Проверить отправку без фото (должна проходить)
-- Проверить отправку с фото (URL из Cloudinary в payload к Leadteh)
-- Проверить отображение в тёмной теме Telegram
-
-## Cloudinary (хостинг фото)
-
-- **Cloud Name:** `dchpd9kpb`
-- **Upload Preset:** `sbor dannie` (Unsigned)
-- **Env-переменные (Vercel):** `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_UPLOAD_PRESET`
-- **Тариф:** Free (25 credits/месяц)
-- **Поток:** клиент отправляет base64 → `api/submit.js` загружает в Cloudinary → получает `secure_url` → передаёт URL в Leadteh
-- **Настройки preset:** Auto-generate public ID, display name = last segment of public ID
+- Тема адаптируется к Telegram (тёмная/светлая через CSS-переменные в `:root`)
+- Webhook захардкожен в `api/submit.js`
 
 ## Интеграция с Leadteh
 
-- **Аккаунт:** rb257034.leadteh.ru
-- **Webhook:** `fe02b6a2-14d6-46c3-836f-5fb8292d0e4f`
-- **Поиск контакта:** по полю `telegram_id`
-- **Передаваемые переменные:** weight, chest, navel, stomach, hips, legs, arms, photo_1, photo_2, photo_3, telegram_id, source, ts, submission_date
+- **Webhook:** `https://rb729467.leadteh.ru/inner_webhook/4c77523d-3415-43d1-8668-07d35281cadb`
+- **Поиск контакта:** по полю `telegram_id` (`contact_by: 'telegram_id'`)
+- **Передаваемые переменные:** `weight`, `chest`, `navel`, `stomach`, `hips`, `legs`, `arms`, `telegram_id`, `source`, `ts`, `submission_date`
+- **source:** `telegram-webapp-data-collection`
+
+## Валидация формы
+
+| HTML `id` / API поле | Метка               | Правило                  |
+|----------------------|---------------------|--------------------------|
+| `weight`             | Вес (кг)            | Число > 0, обязательное  |
+| `chest`              | Обхват груди (см)   | Число > 0, обязательное  |
+| `navel`              | Обхват по пупку (см)| Число > 0, обязательное  |
+| `stomach`            | Обхват живота (см)  | Число > 0, обязательное  |
+| `hips`               | Обхват бёдер (см)   | Число > 0, обязательное  |
+| `legs`               | Обхват квадрицепс (см)| Число > 0, обязательное|
+| `arms`               | Обхват бицепс (см)  | Число > 0, обязательное  |
+
+Значения передаются в Leadteh как строки (`.value.trim()`), не числа.
+
+## Деплой
+
+```bash
+# Git — коммит и пуш (триггерит автодеплой Vercel)
+git add -A
+git commit -m "Описание изменений"
+git push origin main
+
+# Vercel CLI (при необходимости ручного деплоя)
+npm i -g vercel
+vercel --prod
+```
